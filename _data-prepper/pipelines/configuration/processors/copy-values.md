@@ -19,7 +19,7 @@ You can configure the `copy_values` processor with the following options.
 | `entries` | Yes | A list of entries to be copied in an event. |
 | `from_key` | Yes | The key of the entry to be copied. |
 | `to_key` | Yes | The key of the new entry to be added. |
-| `overwrite_if_key_exists` | No | When set to `true`, the existing value is overwritten if `key` already exists in the event. The default value is `false`. |
+| `overwrite_if_to_key_exists` | No | When set to `true`, the existing value is overwritten if `key` already exists in the event. The default value is `false`. |
 
 ## Usage
 
@@ -54,4 +54,4 @@ When you run this processor, it parses the message into the following output:
 {"message": "hello", "newMessage": "hello"}
 ```
 
-> If `newMessage` already exists, its existing value is overwritten with `value`.
+If `newMessage` already exists, its existing value is overwritten with `value`.

@@ -3,11 +3,13 @@ layout: default
 title: API
 parent: Access control
 nav_order: 120
+redirect_from: 
+ - /security-plugin/access-control/api/
 ---
 
 # API
 
-The security plugin REST API lets you programmatically create and manage users, roles, role mappings, action groups, and tenants.
+The Security plugin REST API lets you programmatically create and manage users, roles, role mappings, action groups, and tenants.
 
 ---
 
@@ -20,17 +22,42 @@ The security plugin REST API lets you programmatically create and manage users, 
 
 ## Access control for the API
 
-Just like OpenSearch permissions, you control access to the security plugin REST API using roles. Specify roles in `opensearch.yml`:
+Just like OpenSearch permissions, you control access to the Security plugin REST API using roles. Specify roles in `opensearch.yml`:
 
 ```yml
 plugins.security.restapi.roles_enabled: ["<role>", ...]
 ```
+{% include copy.html %}
+
+If you're working with APIs that manage `Distinguished names` or `Certificates` that require super admin access, enable the REST API admin configuration in your `opensearch.yml` file as shown in the following setting example:
+
+```yml
+plugins.security.restapi.admin.enabled: true
+```
+{% include copy.html %}
 
 These roles can now access all APIs. To prevent access to certain APIs:
 
 ```yml
 plugins.security.restapi.endpoints_disabled.<role>.<endpoint>: ["<method>", ...]
 ```
+{% include copy.html %}
+
+Roles also allow you to control access to specific REST APIs. You can add individual or multiple cluster permissions to a role and grant users access to associated APIs when they are mapped to the role. The following list of cluster permissions includes the endpoints that correspond to the Security REST APIs:
+
+| **Permission**                 | **APIs granted**                   | **Description**                                                                                                                                    |
+|:-------------------------------|:-----------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------|
+| restapi:admin/actiongroups     | `/actiongroup` and `/actiongroups` | Permission to get, delete, create, and patch actions groups (including bulk updates).                                                              |
+| restapi:admin/allowlist        | `/allowlist`                       | Permission to add any endpoints and HTTP requests to a list of allowed endpoints and requests.                                                     |
+| restapi:admin/internalusers    | `/internaluser` and `/user`        | Permission to add, retrieve, modify, and delete any user in the cluster.                                                                           |
+| restapi:admin/nodesdn          | `/nodesdn`                         | Permission to add, retrieve, update, or delete any distinguished names from an allow list and enable communication between clusters and/or nodes.  |
+| restapi:admin/roles            | `/roles`                           | Permission to add, retrieve, modify, and delete any roles in the cluster.                                                                          |
+| restapi:admin/rolesmapping     | `/rolesmapping`                    | Permission to add, retrieve, modify, and delete any roles-mapping.                                                                                 |
+| restapi:admin/ssl/certs/info   | `/ssl/certs/info`                  | Permission to view current Transport and HTTP certificates.                                                                                        |
+| restapi:admin/ssl/certs/reload | `/ssl/certs/reload`                | Permission to view reload Transport and HTTP certificates.                                                                                         |
+| restapi:admin/tenants          | `/tenants`                         | Permission to get, delete, create, and patch tenants.                                                                                              |
+
+
 
 Possible values for `endpoint` are:
 
@@ -41,6 +68,8 @@ Possible values for `endpoint` are:
 - CONFIG
 - CACHE
 - SYSTEMINFO
+- NODESDN
+- SSL
 
 Possible values for `method` are:
 
@@ -57,12 +86,14 @@ plugins.security.restapi.roles_enabled: ["all_access", "security_rest_api_access
 plugins.security.restapi.endpoints_disabled.test-role.ROLES: ["PUT", "POST", "DELETE", "PATCH"]
 plugins.security.restapi.endpoints_disabled.test-role.INTERNALUSERS: ["PUT", "POST", "DELETE", "PATCH"]
 ```
+{% include copy.html %}
 
 To use the PUT and PATCH methods for the [configuration APIs](#configuration), add the following line to `opensearch.yml`:
 
 ```yml
 plugins.security.unsupported.restapi.allow_securityconfig_modification: true
 ```
+{% include copy.html %}
 
 
 ## Reserved and hidden resources
@@ -75,6 +106,7 @@ To mark a resource as reserved, add the following flag:
 kibana_user:
   reserved: true
 ```
+{% include copy.html %}
 
 Likewise, you can mark users, role, role mappings, and action groups as hidden. Resources that have this flag set to true are not returned by the REST API and not visible in OpenSearch Dashboards:
 
@@ -82,6 +114,7 @@ Likewise, you can mark users, role, role mappings, and action groups as hidden. 
 kibana_user:
   hidden: true
 ```
+{% include copy.html %}
 
 Hidden resources are automatically reserved.
 
@@ -101,9 +134,10 @@ Returns account details for the current user. For example, if you sign the reque
 
 #### Request
 
-```
+```json
 GET _plugins/_security/api/account
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -137,19 +171,33 @@ Introduced 1.0
 
 Changes the password for the current user.
 
+#### Path and HTTP methods
 
-#### Request
+```json
+PUT _plugins/_security/api/account
+```
+{% include copy-curl.html %}
+
+#### Request fields
+
+| Field              | Data type  | Description                    | Required  |
+|:-------------------|:-----------|:-------------------------------|:----------|
+| current_password   | String     | The current password.          | Yes       |
+| password           | String     | The new password to set.       | Yes       |
+
+##### Example request
 
 ```json
 PUT _plugins/_security/api/account
 {
-    "current_password" : "old-password",
-    "password" : "new-password"
+    "current_password": "old-password",
+    "password": "new-password"
 }
 ```
+{% include copy-curl.html %}
 
 
-#### Example response
+##### Example response
 
 ```json
 {
@@ -157,6 +205,13 @@ PUT _plugins/_security/api/account
   "message": "'test-user' updated."
 }
 ```
+
+#### Response fields
+
+| Field    | Data type  | Description                   |
+|:---------|:-----------|:------------------------------|
+| status   | String     | The status of the operation.  |
+| message  | String     | A descriptive message.        |
 
 
 ---
@@ -169,12 +224,17 @@ Introduced 1.0
 
 Retrieves one action group.
 
+```json
+GET _plugins/_security/api/actiongroups/<action-group>
+```
+{% include copy-curl.html %}
 
 #### Request
 
+```json
+GET _plugins/_security/api/actiongroups/custom_action_group
 ```
-GET _plugins/_security/api/actiongroups/<action-group>
-```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -204,10 +264,10 @@ Retrieves all action groups.
 
 #### Request
 
-```
+```json
 GET _plugins/_security/api/actiongroups/
 ```
-
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -218,10 +278,21 @@ GET _plugins/_security/api/actiongroups/
     "hidden": false,
     "allowed_actions": [
       "indices:data/read*",
-      "indices:admin/mappings/fields/get*"
+      "indices:admin/mappings/fields/get*",
+      "indices:admin/resolve/index"
     ],
     "type": "index",
     "description": "Allow all read operations",
+    "static": true
+  },
+  "cluster_all": {
+    "reserved": true,
+    "hidden": false,
+    "allowed_actions": [
+      "cluster:*"
+    ],
+    "type": "cluster",
+    "description": "Allow everything on cluster level",
     "static": true
   },
   ...
@@ -235,9 +306,10 @@ Introduced 1.0
 
 #### Request
 
-```
+```json
 DELETE _plugins/_security/api/actiongroups/<action-group>
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -270,6 +342,7 @@ PUT _plugins/_security/api/actiongroups/<action-group>
   ]
 }
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -297,6 +370,7 @@ PATCH _plugins/_security/api/actiongroups/<action-group>
   }
 ]
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -327,6 +401,7 @@ PATCH _plugins/_security/api/actiongroups
   }
 ]
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -351,9 +426,10 @@ Introduced 1.0
 
 #### Request
 
-```
+```json
 GET _plugins/_security/api/internalusers/<username>
 ```
+{% include copy-curl.html %}
 
 
 #### Example response
@@ -378,9 +454,10 @@ Introduced 1.0
 
 #### Request
 
-```
+```json
 GET _plugins/_security/api/internalusers/
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -404,9 +481,10 @@ Introduced 1.0
 
 #### Request
 
-```
+```json
 DELETE _plugins/_security/api/internalusers/<username>
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -422,9 +500,9 @@ DELETE _plugins/_security/api/internalusers/<username>
 Introduced 1.0
 {: .label .label-purple }
 
-Creates or replaces the specified user. You must specify either `password` (plain text) or `hash` (the hashed user password). If you specify `password`, the security plugin automatically hashes the password before storing it.
+Creates or replaces the specified user. You must specify either `password` (plain text) or `hash` (the hashed user password). If you specify `password`, the Security plugin automatically hashes the password before storing it.
 
-Note that any role you supply in the `opendistro_security_roles` array must already exist for the security plugin to map the user to that role. To see predefined roles, refer to [the list of predefined roles]({{site.url}}{{site.baseurl}}/security/access-control/users-roles#predefined-roles). For instructions on how to create a role, refer to [creating a role](#create-role).
+Note that any role you supply in the `opendistro_security_roles` array must already exist for the Security plugin to map the user to that role. To see predefined roles, refer to [the list of predefined roles]({{site.url}}{{site.baseurl}}/security/access-control/users-roles#predefined-roles). For instructions on how to create a role, refer to [creating a role](#create-role).
 
 #### Request
 
@@ -432,7 +510,7 @@ Note that any role you supply in the `opendistro_security_roles` array must alre
 PUT _plugins/_security/api/internalusers/<username>
 {
   "password": "kirkpass",
-  "opendistro_security_roles": ["maintenance_staff", "weapons"],
+  "opendistro_security_roles": ["maintenance_staff", "database_manager"],
   "backend_roles": ["role 1", "role 2"],
   "attributes": {
     "attribute1": "value1",
@@ -440,6 +518,7 @@ PUT _plugins/_security/api/internalusers/<username>
   }
 }
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -473,6 +552,7 @@ PATCH _plugins/_security/api/internalusers/<username>
   }
 ]
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -505,6 +585,7 @@ PATCH _plugins/_security/api/internalusers
   }
 ]
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -529,9 +610,10 @@ Retrieves one role.
 
 #### Request
 
-```
+```json
 GET _plugins/_security/api/roles/<role>
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -577,9 +659,10 @@ Retrieves all roles.
 
 #### Request
 
-```
+```json
 GET _plugins/_security/api/roles/
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -617,9 +700,10 @@ Introduced 1.0
 
 #### Request
 
-```
+```json
 DELETE _plugins/_security/api/roles/<role>
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -667,6 +751,7 @@ PUT _plugins/_security/api/roles/<role>
   }]
 }
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -706,6 +791,7 @@ PATCH _plugins/_security/api/roles/<role>
   }
 ]
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -739,6 +825,7 @@ PATCH _plugins/_security/api/roles
   }
 ]
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -762,9 +849,10 @@ Retrieves one role mapping.
 
 #### Request
 
-```
+```json
 GET _plugins/_security/api/rolesmapping/<role>
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -787,9 +875,10 @@ Retrieves all role mappings.
 
 #### Request
 
-```
+```json
 GET _plugins/_security/api/rolesmapping
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -812,9 +901,10 @@ Deletes the specified role mapping.
 
 #### Request
 
-```
+```json
 DELETE _plugins/_security/api/rolesmapping/<role>
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -842,6 +932,7 @@ PUT _plugins/_security/api/rolesmapping/<role>
   "users" : [ "worf" ]
 }
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -872,6 +963,7 @@ PATCH _plugins/_security/api/rolesmapping/<role>
   }
 ]
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -902,6 +994,7 @@ PATCH _plugins/_security/api/rolesmapping
   }
 ]
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -925,9 +1018,10 @@ Retrieves one tenant.
 
 #### Request
 
-```
+```json
 GET _plugins/_security/api/tenants/<tenant>
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -951,9 +1045,10 @@ Retrieves all tenants.
 
 #### Request
 
-```
+```json
 GET _plugins/_security/api/tenants/
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -983,9 +1078,10 @@ Deletes the specified tenant.
 
 #### Request
 
-```
+```json
 DELETE _plugins/_security/api/tenants/<tenant>
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -1011,6 +1107,7 @@ PUT _plugins/_security/api/tenants/<tenant>
   "description": "A tenant for the human resources team."
 }
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -1038,6 +1135,7 @@ PATCH _plugins/_security/api/tenants/<tenant>
   }
 ]
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -1074,6 +1172,7 @@ PATCH _plugins/_security/api/tenants/
   }
 ]
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -1086,19 +1185,21 @@ PATCH _plugins/_security/api/tenants/
 
 ---
 
+
 ## Configuration
 
 ### Get configuration
 Introduced 1.0
 {: .label .label-purple }
 
-Retrieves the current security plugin configuration in JSON format.
+Retrieves the current Security plugin configuration in JSON format.
 
 #### Request
 
-```
+```json
 GET _plugins/_security/api/securityconfig
 ```
+{% include copy-curl.html %}
 
 
 ### Update configuration
@@ -1150,6 +1251,7 @@ PUT _plugins/_security/api/securityconfig/config
   }
 }
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -1172,6 +1274,7 @@ Before you can execute the operation, you must first add the following line to `
 ```yml
 plugins.security.unsupported.restapi.allow_securityconfig_modification: true
 ```
+{% include copy.html %}
 
 #### Request
 
@@ -1183,6 +1286,7 @@ PATCH _plugins/_security/api/securityconfig
   }
 ]
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -1193,17 +1297,103 @@ PATCH _plugins/_security/api/securityconfig
 }
 ```
 
+### Configuration upgrade check
+
+Introduced 2.13
+{: .label .label-purple }
+
+Checks the current configuration bundled with the host's Security plugin and compares it to the version of the OpenSearch Security plugin the user downloaded. Then, the API responds indicating whether or not an upgrade can be performed and what resources can be updated.
+
+With each new OpenSearch version, there are changes to the default security configuration. This endpoint helps cluster operators determine whether the cluster is missing defaults or has stale definitions of defaults.
+{: .note}
+
+#### Request
+
+```json
+GET _plugins/_security/api/_upgrade_check
+```
+{% include copy-curl.html %}
+
+#### Example response
+
+```json
+{
+  "status" : "OK",
+  "upgradeAvailable" : true,
+  "upgradeActions" : {
+    "roles" : {
+      "add" : [ "flow_framework_full_access" ]
+    }
+  }
+}
+```
+
+#### Response fields
+
+| Field    | Data type  | Description                   |
+|:---------|:-----------|:------------------------------|
+| `upgradeAvailable`   | Boolean     | Responds with `true` when an upgrade to the security configuration is available.  |
+| `upgradeActions`  | Object list    | A list of security objects that would be modified when upgrading the host's Security plugin.  |
+
+### Configuration upgrade
+
+Introduced 2.13
+{: .label .label-purple }
+
+Adds and updates resources on a host's existing security configuration from the configuration bundled with the latest version of the Security plugin.
+
+These bundled configuration files can be found in the `<OPENSEARCH_HOME>/security/config` directory. Default configuration files are updated when OpenSearch is upgraded, whereas the cluster configuration is only updated by the cluster operators. This endpoint helps cluster operator upgrade missing defaults and stale default definitions. 
+
+
+#### Request
+
+```json
+POST _plugins/_security/api/_upgrade_perform
+{
+  "configs" : [ "roles" ]
+}
+```
+{% include copy-curl.html %}
+
+#### Request fields
+
+| Field           | Data type  | Description                                                                                                       | Required |
+|:----------------|:-----------|:------------------------------------------------------------------------------------------------------------------|:---------|
+| `configs`              | Array    | Specifies the configurations to be upgraded. This field can include any combination of the following configurations: `actiongroups`,`allowlist`, `audit`, `internalusers`, `nodesdn`, `roles`, `rolesmappings`, `tenants`.<br>  Default is all supported configurations.  | No      |
+
+
+#### Example response
+
+```json
+{
+  "status" : "OK",
+  "upgrades" : {
+    "roles" : {
+      "add" : [ "flow_framework_full_access" ]
+    }
+  }
+}
+```
+
+#### Response fields
+
+| Field    | Data type  | Description                   |
+|:---------|:-----------|:------------------------------|
+| `upgrades`    | Object    | A container for the upgrade results, organized by configuration type, such as `roles`. Each changed configuration type will be represented as a key in this object.           |
+| `roles`     | Object    | Contains a list of role-based action keys of objects modified by the upgrade. |
+
 ---
 
 ## Distinguished names
 
-These REST APIs let a super admin add, retrieve, update, or delete any distinguished names from an allow list to enable communication between clusters and/or nodes.
+These REST APIs let a super admin (or a user with sufficient permissions to access this API) add, retrieve, update, or delete any distinguished names from an allow list to enable communication between clusters and/or nodes.
 
 Before you can use the REST API to configure the allow list, you must first add the following line to `opensearch.yml`:
 
 ```yml
 plugins.security.nodes_dn_dynamic_config_enabled: true
 ```
+{% include copy.html %}
 
 
 ### Get distinguished names
@@ -1212,9 +1402,10 @@ Retrieves all distinguished names in the allow list.
 
 #### Request
 
-```
+```json
 GET _plugins/_security/api/nodesdn
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -1232,9 +1423,10 @@ To get the distinguished names from a specific cluster's or node's allow list, i
 
 #### Request
 
-```
+```json
 GET _plugins/_security/api/nodesdn/<cluster-name>
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -1263,6 +1455,7 @@ PUT _plugins/_security/api/nodesdn/<cluster-name>
   ]
 }
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -1273,6 +1466,56 @@ PUT _plugins/_security/api/nodesdn/<cluster-name>
 }
 ```
 
+### Update all distinguished names
+
+Makes a bulk update for the list of distinguished names.
+
+#### Path and HTTP methods
+
+```json
+PATCH _plugins/_security/api/nodesdn
+```
+{% include copy-curl.html %}
+
+#### Request fields
+
+| Field           | Data type  | Description                                                                                                       | Required |
+|:----------------|:-----------|:------------------------------------------------------------------------------------------------------------------|:---------|
+| op              | string     | The operation to perform on the action group. Possible values: `remove`,`add`, `replace`, `move`, `copy`, `test`. | Yes      |
+| path            | string     | The path to the resource.                                                                                         | Yes      |
+| value           | Array      | The new values used for the update.                                                                               | Yes      |
+
+
+##### Example request
+
+```
+PATCH _plugins/_security/api/nodesdn
+[
+   {
+      "op":"replace",
+      "path":"/cluster1/nodes_dn/0",
+      "value": ["CN=Karen Berge,CN=admin,DC=corp,DC=Fabrikam,DC=COM", "CN=George Wall,CN=admin,DC=corp,DC=Fabrikam,DC=COM"]
+   }
+]
+```
+{% include copy-curl.html %}
+
+##### Example response
+
+```json
+{
+  "status":"OK",
+  "message":"Resources updated."
+}
+```
+
+#### Response fields
+
+| Field   | Data type | Description          |
+|:--------|:----------|:---------------------|
+| status  | string    | The response status. |
+| message | string    | Response message.    |
+
 
 ### Delete distinguished names
 
@@ -1280,9 +1523,10 @@ Deletes all distinguished names in the specified cluster's or node's allow list.
 
 #### Request
 
-```
+```json
 DELETE _plugins/_security/api/nodesdn/<cluster-name>
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -1306,9 +1550,10 @@ Retrieves the cluster's security certificates.
 
 #### Request
 
-```
+```json
 GET _plugins/_security/api/ssl/certs
 ```
+{% include copy-curl.html %}
 
 #### Example response
 
@@ -1334,28 +1579,77 @@ GET _plugins/_security/api/ssl/certs
   ]
 }
 ```
-### Reload certificates
-Introduced 1.0
-{: .label .label-purple }
 
-Reloads SSL certificates that are about to expire without restarting the OpenSearch node. 
+### Reload transport certificates
 
-This call assumes that new certificates are in the same location specified by the security configurations in opensearch.yml. To keep sensitive certificate reloads secure, this call only allows hot reload with certificates issued by the same issuer and subject DN and SAN with expiry dates after the current certificate.
+Reload transport layer communication certificates. These REST APIs let a super admin (or a user with sufficient permissions to access this API) reload transport layer certificates.
 
-#### Request
-
-```
-PUT _opendistro/_security/api/ssl/transport/reloadcerts
-PUT _opendistro/_security/api/ssl/http/reloadcerts
-```
-
-#### Example response
+#### Path and HTTP methods
 
 ```json
-{ 
-  "message": "updated http certs" 
+PUT /_plugins/_security/api/ssl/transport/reloadcerts
+```
+{% include copy-curl.html %}
+
+##### Example request
+
+```bash
+curl -X PUT "https://your-opensearch-cluster/_plugins/_security/api/ssl/transport/reloadcerts"
+```
+{% include copy-curl.html %}
+
+##### Example response
+
+```json
+{
+  "status": "OK",
+  "message": "updated transport certs"
 }
 ```
+
+#### Response fields
+
+| Field   | Data type | Description                                                                       |
+|:--------|:----------|:----------------------------------------------------------------------------------|
+| status  | String    | Indicates the status of the operation. Possible values: "OK" or an error message. |
+| message | String    | Additional information about the operation.                                       |
+
+
+#### Reload HTTP certificates
+
+Reload HTTP layer communication certificates. These REST APIs let a super admin (or a user with sufficient permissions to access this API) reload HTTP layer certificates.
+
+#### Path and HTTP methods
+
+```json
+PUT /_plugins/_security/api/ssl/http/reloadcerts
+```
+{% include copy-curl.html %}
+
+
+##### Example request
+
+```
+curl -X PUT "https://your-opensearch-cluster/_plugins/_security/api/ssl/http/reloadcerts"
+```
+{% include copy-curl.html %}
+
+##### Example response
+
+```json
+{
+  "status": "OK",
+  "message": "updated http certs"
+}
+```
+
+#### Response fields
+
+| Field   | Data type | Description                                                         |
+|:--------|:----------|:--------------------------------------------------------------------|
+| status  | String    | The status of the API operation. Possible value: "OK".              |
+| message | String    | A message indicating that the HTTP certificates have been updated.  |
+
 ---
 
 ## Cache
@@ -1364,14 +1658,15 @@ PUT _opendistro/_security/api/ssl/http/reloadcerts
 Introduced 1.0
 {: .label .label-purple }
 
-Flushes the security plugin user, authentication, and authorization cache.
+Flushes the Security plugin user, authentication, and authorization cache.
 
 
 #### Request
 
-```
+```json
 DELETE _plugins/_security/api/cache
 ```
+{% include copy-curl.html %}
 
 
 #### Example response
@@ -1392,14 +1687,15 @@ DELETE _plugins/_security/api/cache
 Introduced 1.0
 {: .label .label-purple }
 
-Checks to see if the security plugin is up and running. If you operate your cluster behind a load balancer, this operation is useful for determining node health and doesn't require a signed request.
+Checks to see if the Security plugin is up and running. If you operate your cluster behind a load balancer, this operation is useful for determining node health and doesn't require a signed request.
 
 
 #### Request
 
-```
+```json
 GET _plugins/_security/health
 ```
+{% include copy-curl.html %}
 
 
 #### Example response
@@ -1417,9 +1713,9 @@ GET _plugins/_security/health
 
 ## Audit logs
 
-The following API is available for audit logging in the security plugin.
+The following API is available for audit logging in the Security plugin.
 
-### Enable Audit Logs
+### Enable audit logs
 
 This API allows you to enable or disable audit logging, define the configuration for audit logging and compliance, and make updates to settings.
 
@@ -1430,31 +1726,31 @@ You can do an initial configuration of audit logging in the `audit.yml` file, fo
 
 #### Request fields
 
-Field | Data Type | Description
+Field | Data type | Description
 :--- | :--- | :---
 `enabled` | Boolean | Enables or disables audit logging. Default is `true`.
 `audit` | Object | Contains fields for audit logging configuration.
-`audit`<br>&nbsp;&nbsp;&nbsp;&nbsp;`ignore_users` | Array | Users to be excluded from auditing. Wildcard patterns are supported<br>Example: `ignore_users: ["test-user", employee-*"]`
-`audit`<br>&nbsp;&nbsp;&nbsp;&nbsp;`ignore_requests` | Array | Requests to be excluded from auditing. Wildcard patterns are supported.<br>Example: `ignore_requests: ["indices:data/read/*", "SearchRequest"]`
-`audit`<br>&nbsp;&nbsp;&nbsp;&nbsp;`disabled_rest_categories` | Array | Categories to exclude from REST API auditing. Default categories are `AUTHENTICATED`, `GRANTED_PRIVILEGES`.
-`audit`<br>&nbsp;&nbsp;&nbsp;&nbsp;`disabled_transport_categories` | Array | Categories to exclude from Transport API auditing. Default categories are `AUTHENTICATED`, `GRANTED_PRIVILEGES`.
-`audit`<br>&nbsp;&nbsp;&nbsp;&nbsp;`log_request_body` | Boolean | Includes the body of the request (if available) for both REST and the transport layer. Default is  `true`.
-`audit`<br>&nbsp;&nbsp;&nbsp;&nbsp;`resolve_indices` | Boolean | Logs all indexes affected by a request. Resolves aliases and wildcards/date patterns. Default is `true`.
-`audit`<br>&nbsp;&nbsp;&nbsp;&nbsp;`resolve_bulk_requests` | Boolean | Logs individual operations in a bulk request. Default is `false`.
-`audit`<br>&nbsp;&nbsp;&nbsp;&nbsp;`exclude_sensitive_headers` | Boolean | Excludes sensitive headers from being included in the logs. Default is `true`.
-`audit`<br>&nbsp;&nbsp;&nbsp;&nbsp;`enable_transport` | Boolean | Enables/disables Transport API auditing. Default is `true`.
-`audit`<br>&nbsp;&nbsp;&nbsp;&nbsp;`enable_rest` | Boolean | Enables/disables REST API auditing. Default is `true`.
+`audit.ignore_users` | Array | Users to be excluded from auditing. Wildcard patterns are supported<br>Example: `ignore_users: ["test-user", employee-*"]`
+`audit.ignore_requests` | Array | Requests to be excluded from auditing. Wildcard patterns are supported.<br>Example: `ignore_requests: ["indices:data/read/*", "SearchRequest"]`
+`audit.disabled_rest_categories` | Array | Categories to exclude from REST API auditing. Default categories are `AUTHENTICATED`, `GRANTED_PRIVILEGES`.
+`audit.disabled_transport_categories` | Array | Categories to exclude from Transport API auditing. Default categories are `AUTHENTICATED`, `GRANTED_PRIVILEGES`.
+`audit.log_request_body` | Boolean | Includes the body of the request (if available) for both REST and the transport layer. Default is  `true`.
+`audit.resolve_indices` | Boolean | Logs all indexes affected by a request. Resolves aliases and wildcards/date patterns. Default is `true`.
+`audit.resolve_bulk_requests` | Boolean | Logs individual operations in a bulk request. Default is `false`.
+`audit.exclude_sensitive_headers` | Boolean | Excludes sensitive headers from being included in the logs. Default is `true`.
+`audit.enable_transport` | Boolean | Enables/disables Transport API auditing. Default is `true`.
+`audit.enable_rest` | Boolean | Enables/disables REST API auditing. Default is `true`.
 `compliance` | Object | Contains fields for compliance configuration. 
-`compliance`<br>&nbsp;&nbsp;&nbsp;&nbsp;`enabled` | Boolean | Enables or disables compliance. Default is `true`.
-`compliance`<br>&nbsp;&nbsp;&nbsp;&nbsp;`write_log_diffs` | Boolean | Logs only diffs for document updates. Default is `false`.
-`compliance`<br>&nbsp;&nbsp;&nbsp;&nbsp;`read_watched_fields` | Object | Map of indexes and fields to monitor for read events. Wildcard patterns are supported for both index names and fields.
-`compliance`<br>&nbsp;&nbsp;&nbsp;&nbsp;`read_ignore_users` | Array | List of users to ignore for read events. Wildcard patterns are supported.<br>Example: `read_ignore_users: ["test-user", "employee-*"]`
-`compliance`<br>&nbsp;&nbsp;&nbsp;&nbsp;`write_watched_indices` | Array | List of indexes to watch for write events. Wildcard patterns are supported.<br>Example: `write_watched_indices: ["twitter", "logs-*"]`
-`compliance`<br>&nbsp;&nbsp;&nbsp;&nbsp;`write_ignore_users` | Array | List of users to ignore for write events. Wildcard patterns are supported.<br>Example: `write_ignore_users: ["test-user", "employee-*"]`
-`compliance`<br>&nbsp;&nbsp;&nbsp;&nbsp;`read_metadata_only` | Boolean | Logs only metadata of the document for read events. Default is `true`.
-`compliance`<br>&nbsp;&nbsp;&nbsp;&nbsp;`write_metadata_only` | Boolean | Log only metadata of the document for write events. Default is `true`.
-`compliance`<br>&nbsp;&nbsp;&nbsp;&nbsp;`external_config` | Boolean | Logs external configuration files for the node. Default is `false`.
-`compliance`<br>&nbsp;&nbsp;&nbsp;&nbsp;`internal_config` | Boolean | Logs updates to internal security changes. Default is `true`.
+`compliance.enabled` | Boolean | Enables or disables compliance. Default is `true`.
+`compliance.write_log_diffs` | Boolean | Logs only diffs for document updates. Default is `false`.
+`compliance.read_watched_fields` | Object | Map of indexes and fields to monitor for read events. Wildcard patterns are supported for both index names and fields.
+`compliance.read_ignore_users` | Array | List of users to ignore for read events. Wildcard patterns are supported.<br>Example: `read_ignore_users: ["test-user", "employee-*"]`
+`compliance.write_watched_indices` | Array | List of indexes to watch for write events. Wildcard patterns are supported.<br>Example: `write_watched_indices: ["twitter", "logs-*"]`
+`compliance.write_ignore_users` | Array | List of users to ignore for write events. Wildcard patterns are supported.<br>Example: `write_ignore_users: ["test-user", "employee-*"]`
+`compliance.read_metadata_only` | Boolean | Logs only metadata of the document for read events. Default is `true`.
+`compliance.write_metadata_only` | Boolean | Log only metadata of the document for write events. Default is `true`.
+`compliance.external_config` | Boolean | Logs external configuration files for the node. Default is `false`.
+`compliance.internal_config` | Boolean | Logs updates to internal security changes. Default is `true`.
 
 Changes to the `_readonly` property result in a 409 error, as indicated in the response below.
 {: .note}
@@ -1475,9 +1771,10 @@ Changes to the `_readonly` property result in a 409 error, as indicated in the r
 
 A GET call retrieves the audit configuration.
 
-```
+```json
 GET /_opendistro/_security/api/audit
 ```
+{% include copy-curl.html %}
 
 **PUT**
 
@@ -1519,6 +1816,7 @@ PUT /_opendistro/_security/api/audit/config
   }
 }
 ```
+{% include copy-curl.html %}
 
 **PATCH**
 
@@ -1529,8 +1827,9 @@ Using the PATCH method also requires a user to have a security configuration tha
 ```bash
 curl -X PATCH -k -i --cert <admin_cert file name> --key <admin_cert_key file name> <domain>/_opendistro/_security/api/audit -H 'Content-Type: application/json' -d'[{"op":"add","path":"/config/enabled","value":"true"}]'
 ```
+{% include copy.html %}
 
-The OpenSearch Dashboards dev tool does not currently support the PATCH method. You can use [curl](https://curl.se/), [Postman](https://www.postman.com/), or another alternative process to update the configuration using this method. To follow the GitHub issue for support of the PATCH method in Dashboards, see [issue #2343](https://github.com/opensearch-project/OpenSearch-Dashboards/issues/2343).
+OpenSearch Dashboards Dev Tools do not currently support the PATCH method. You can use [curl](https://curl.se/), [Postman](https://www.postman.com/), or another alternative process to update the configuration using this method. To follow the GitHub issue for support of the PATCH method in Dashboards, see [issue #2343](https://github.com/opensearch-project/OpenSearch-Dashboards/issues/2343).
 {: .note}
 
 #### Example response

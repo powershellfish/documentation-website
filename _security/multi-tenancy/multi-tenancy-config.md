@@ -8,7 +8,7 @@ nav_order: 145
 
 # Multi-tenancy configuration
 
-Multi-tenancy is enabled by default, but you can disable it or change its settings using `config/opensearch-security/config.yml`:
+Multi-tenancy is enabled in OpenSearch Dashboards by default. If you need to disable or change settings related to multi-tenancy, see the `kibana` settings in `config/opensearch-security/config.yml`, as shown in the following example:
 
 ```yml
 config:
@@ -136,17 +136,16 @@ _meta:
 ```
 
 
-## Manage OpenSearch Dashboards indices
+## Manage OpenSearch Dashboards indexes
 
-The open source version of OpenSearch Dashboards saves all objects to a single index: `.kibana`. The security plugin uses this index for the global tenant, but separate indices for every other tenant. Each user also has a private tenant, so you might see a large number of indices that follow two patterns:
+The open source version of OpenSearch Dashboards saves all objects to a single index: `.kibana`. The Security plugin uses this index for the global tenant, but separate indexes for every other tenant. Each user also has a private tenant, so you might see a large number of indexes that follow two patterns:
 
 ```
 .kibana_<hash>_<tenant_name>
 .kibana_<hash>_<username>
 ```
 
-The security plugin scrubs these index names of special characters, so they might not be a perfect match of tenant names and usernames.
+The Security plugin scrubs these index names of special characters, so they might not be a perfect match of tenant names and usernames.
 {: .tip }
 
 To back up your OpenSearch Dashboards data, [take a snapshot]({{site.url}}{{site.baseurl}}/opensearch/snapshots/snapshot-restore/) of all tenant indexes using an index pattern such as `.kibana*`.
-

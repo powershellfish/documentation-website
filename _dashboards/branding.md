@@ -1,10 +1,10 @@
 ---
 layout: default
-title: Customizing your branding
-nav_order: 15
+title: Custom branding
+nav_order: 130
 ---
 
-# Customizing your branding
+# Custom branding
 Introduced 1.2
 {: .label .label-purple }
 
@@ -147,7 +147,7 @@ You can continue using the top header bar in the default view for custom navigat
 
 ## Sample configuration
 
-The following configuration enables the security plugin and SSL within OpenSearch Dashboards and uses custom branding elements to replace the OpenSearch logo and application title.
+The following configuration enables the Security plugin and SSL within OpenSearch Dashboards and uses custom branding elements to replace the OpenSearch logo and application title.
 
 ```yml
 server.host: "0"

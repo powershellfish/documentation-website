@@ -1,14 +1,14 @@
-title: OpenSearch documentation
+title: OpenSearch Documentation
 description: >- # this means to ignore newlines until "baseurl:"
   Documentation for OpenSearch, the Apache 2.0 search, analytics, and visualization suite with advanced security, alerting, SQL support, automated index management, deep performance analysis, and more.
 baseurl: "/docs/latest" # the subpath of your site, e.g. /blog
 url: "https://opensearch.org" # the base hostname & protocol for your site, e.g. http://example.com
 permalink: /:path/
 
-opensearch_version: '2.7.0'
-opensearch_dashboards_version: '2.7.0'
-opensearch_major_minor_version: '2.7'
-lucene_version: '9_5_0'
+opensearch_version: '2.13.0'
+opensearch_dashboards_version: '2.13.0'
+opensearch_major_minor_version: '2.13'
+lucene_version: '9_10_0'
 
 # Build settings
 markdown: kramdown
@@ -37,7 +37,13 @@ collections:
   im-plugin:
     permalink: /:collection/:path/
     output: true
+  ingest-pipelines:
+    permalink: /:collection/:path/
+    output: true
   dashboards:
+    permalink: /:collection/:path/
+    output: true
+  integrations:
     permalink: /:collection/:path/
     output: true
   tuning-your-cluster:
@@ -64,13 +70,25 @@ collections:
   observing-your-data:
     permalink: /:collection/:path/
     output: true
+  reporting:
+    permalink: /:collection/:path/
+    output: true
+  analyzers:
+    permalink: /:collection/:path/
+    output: true
   query-dsl:
     permalink: /:collection/:path/
     output: true 
+  aggregations:
+    permalink: /:collection/:path/
+    output: true
   field-types:
     permalink: /:collection/:path/
     output: true
   clients:
+    permalink: /:collection/:path/
+    output: true
+  benchmark:
     permalink: /:collection/:path/
     output: true
   data-prepper: 
@@ -88,10 +106,31 @@ collections:
   external_links:
     permalink: /:collection/:path/
     output: true
+  developer-documentation:
+    permalink: /:collection/:path/
+    output: true
+  about:
+    permalink: /:collection/:path/
+    output: true
+  automating-configurations:
+    permalink: /:collection/:path/
+    output: true
+  dashboards-assistant:
+    permalink: /:collection/:path/
+    output: true
+  getting-started:
+    permalink: /:collection/:path/
+    output: true
 
-just_the_docs:
+opensearch_collection:
   # Define the collections used in the theme
   collections:
+    about:
+      name: About OpenSearch
+      nav_fold: true
+    getting-started:
+      name: Getting started
+      nav_fold: true
     install-and-configure:
       name: Install and upgrade
       nav_fold: true
@@ -103,11 +142,17 @@ just_the_docs:
     im-plugin:
       name: Managing Indexes
       nav_fold: true
+    ingest-pipelines:
+      name: Ingest Pipelines
+      nav_fold: true
     dashboards:
       name: OpenSearch Dashboards
       nav_fold: true
+    integrations:
+      name: OpenSearch Integrations
+      nav_fold: true
     tuning-your-cluster:
-      name: Tuning your cluster
+      name: Creating and tuning your cluster
       nav_fold: true
     security:
       name: Security in OpenSearch
@@ -115,32 +160,35 @@ just_the_docs:
     security-analytics:
       name: Security analytics 
       nav_fold: true
+    field-types:
+      name: Mappings and field types
+      nav_fold: true
+    analyzers:
+      name: Text analysis
+      nav_fold: true
+    query-dsl:
+      name: Query DSL
+      nav_fold: true
+    aggregations:
+      name: Aggregations
+      nav_fold: true
     search-plugins:
       name: Search 
       nav_fold: true
     ml-commons-plugin:
       name: Machine learning
       nav_fold: true
-    tuning-your-cluster:
-      name: Tuning your cluster
-      nav_fold: true 
+    automating-configurations:
+      name: Automating configurations
+      nav_fold: true
     monitoring-your-cluster:
       name: Monitoring your cluster
       nav_fold: true
     observing-your-data:
       name: Observability
       nav_fold: true
-    query-dsl:
-      name: Query DSL, Aggregations, and Analyzers
-      nav_fold: true
-    field-types:
-      name: Mappings and field types
-      nav_fold: true
-    clients:
-      name: Clients
-      nav_fold: true
-    data-prepper: 
-      name: Data Prepper
+    reporting:
+      name: Reporting
       nav_fold: true
     tools:
       name: Tools
@@ -151,7 +199,56 @@ just_the_docs:
     troubleshoot:
       name: Troubleshooting
       nav_fold: true
+    developer-documentation:
+      name: Developer documentation
+      nav_fold: true
+    
 
+clients_collection:
+  collections:
+    clients:
+        name: Clients
+        nav_fold: true
+
+benchmark_collection:
+  collections:
+    benchmark:
+      name: OpenSearch Benchmark
+      nav_fold: true
+
+data_prepper_collection:
+  collections:
+    data-prepper: 
+      name: Data Prepper
+      nav_fold: true
+
+# Defaults
+
+defaults:
+  -
+    scope:
+      path: "" # an empty string here means all files in the project
+    values:
+      section: "opensearch"
+      section-name: "OpenSearch and OpenSearch Dashboards"
+  -
+    scope:
+      path: "_data-prepper"
+    values:
+      section: "data-prepper"
+      section-name: "Data Prepper"
+  -
+    scope:
+      path: "_clients"
+    values:
+      section: "clients"
+      section-name: "Clients"
+  -
+    scope:
+      path: "_benchmark"
+    values:
+      section: "benchmark"
+      section-name: "Benchmark"
 
 # Enable or disable the site search
 # By default, just-the-docs enables its JSON file-based search. We also have an OpenSearch-driven search functionality.
@@ -199,6 +296,11 @@ heading_anchors: false
 # Adds on-hover anchor links to h2-h6
 anchor_links: true
 
+# This setting governs including warning on every page
+# 'unsupported' produces red warning, 'supported' produces yellow warning
+# everything else produces no warning
+doc_version: latest
+
 footer_content:
 
 plugins:
@@ -224,3 +326,4 @@ exclude:
   - vendor/ruby/
   - README.md
   - .idea
+  - templates

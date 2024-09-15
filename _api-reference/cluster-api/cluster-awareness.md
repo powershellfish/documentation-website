@@ -6,9 +6,12 @@ parent: Cluster APIs
 has_children: false
 redirect_from:
   - /api-reference/cluster-awareness/
+  - /opensearch/rest-api/cluster-awareness/
 ---
 
 # Cluster routing and awareness
+**Introduced 1.0**
+{: .label .label-purple }
 
 To control the distribution of search or HTTP traffic, you can use the weights per awareness attribute to control the distribution of search or HTTP traffic across zones. This is commonly used for zonal deployments, heterogeneous instances, and routing traffic away from zones during zonal failure.
 
@@ -52,7 +55,7 @@ In the following example request body, `zone_1` and `zone_2` receive 50 requests
 
 The following example request creates a round robin shard allocation for search traffic by using an undefined ratio:
 
-### Request
+#### Request
 
 ```json
 PUT /_cluster/routing/awareness/zone/weights
@@ -68,7 +71,7 @@ PUT /_cluster/routing/awareness/zone/weights
 ```
 {% include copy-curl.html %}
 
-### Response
+#### Response
 
 ```
 {
@@ -81,14 +84,14 @@ PUT /_cluster/routing/awareness/zone/weights
 
 The following example request gets weights for all zones.
 
-### Request
+#### Request
 
 ```json
 GET /_cluster/routing/awareness/zone/weights
 ```
 {% include copy-curl.html %}
 
-### Response
+#### Response
 
 OpenSearch responds with the weight of each zone:
 
@@ -109,14 +112,14 @@ OpenSearch responds with the weight of each zone:
 
 You can remove your weight ratio for each zone using the `DELETE` method.
 
-### Request
+#### Request
 
 ```json
 DELETE /_cluster/routing/awareness/zone/weights
 ```
 {% include copy-curl.html %}
 
-### Response
+#### Response
 
 ```json
 {

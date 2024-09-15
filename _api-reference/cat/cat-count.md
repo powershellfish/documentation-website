@@ -2,13 +2,15 @@
 layout: default
 title: CAT count
 parent: CAT API
-
 nav_order: 10
 has_children: false
+redirect_from:
+- /opensearch/rest-api/cat/cat-count/
+
 ---
 
 # CAT count
-Introduced 1.0
+**Introduced 1.0**
 {: .label .label-purple }
 
 The CAT count operation lists the number of documents in your cluster.

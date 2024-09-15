@@ -5,13 +5,15 @@ parent: CAT API
 
 nav_order: 52
 has_children: false
+redirect_from:
+ - /opensearch/rest-api/cat/cat-repositories/
 ---
 
 # CAT repositories
-Introduced 1.0
+**Introduced 1.0**
 {: .label .label-purple }
 
-The CAT repositories operation lists all completed and ongoing index and shard recoveries.
+The CAT repositories operation lists all snapshot repositories for a cluster.
 
 ## Example
 

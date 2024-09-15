@@ -37,11 +37,11 @@ vis_builder.enabled: false
 Follow these steps to create a new visualization using VisBuilder in your environment:
 
 1. Open Dashboards:
-    - If you're not running the security plugin, go to http://localhost:5601.
-    - If you're running the security plugin, go to https://localhost:5601 and log in with your username and password (default is admin/admin).
+    - If you're not running the Security plugin, go to http://localhost:5601.
+    - If you're running the Security plugin, go to https://localhost:5601 and log in with your username and password (default is admin/admin).
 
 2. Confirm that the **Enable experimental visualizations** option is turned on.
-   - From the top menu, select **Management** **>** **Stack Management** **>** **Advanced Settings**.
+   - From the top menu, select **Management** > **Dashboards Management** > **Advanced Settings**.
    - Select **Visualization** and verify that the option is turned on.
    
    <img src="{{site.url}}{{site.baseurl}}/images/enable-experimental-viz.png" alt="Enable experimental visualizations" width="600">

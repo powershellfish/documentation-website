@@ -4,10 +4,12 @@ title: Cluster allocation explain
 nav_order: 10
 parent: Cluster APIs
 has_children: false
+redirect_from:
+ - /opensearch/rest-api/cluster-allocation/
 ---
 
 # Cluster allocation explain
-Introduced 1.0
+**Introduced 1.0**
 {: .label .label-purple }
 
 The most basic cluster allocation explain request finds an unassigned shard and explains why it can't be allocated to a node.

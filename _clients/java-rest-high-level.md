@@ -6,10 +6,10 @@ nav_order: 20
 
 # Java high-level REST client
 
-The OpenSearch Java high-level REST client will be deprecated starting with OpenSearch version 3.0.0 and will be removed in a future release. We recommend switching to the [Java client]({{site.url}}{{site.baseurl}}/clients/java/) instead.
+The OpenSearch Java high-level REST client is deprecated. Support will be removed in OpenSearch version 3.0.0. We recommend switching to the [Java client]({{site.url}}{{site.baseurl}}/clients/java/) instead.
 {: .warning}
 
-The OpenSearch Java high-level REST client lets you interact with your OpenSearch clusters and indices through Java methods and data structures rather than HTTP methods and JSON.
+The OpenSearch Java high-level REST client lets you interact with your OpenSearch clusters and indexes through Java methods and data structures rather than HTTP methods and JSON.
 
 ## Setup
 
@@ -27,7 +27,7 @@ You can now start your OpenSearch cluster. The OpenSearch 1.x high-level REST cl
 
 ## Security
 
-Before using the REST client in your Java application, you must configure the application's truststore to connect to the security plugin. If you are using self-signed certificates or demo configurations, you can use the following command to create a custom truststore and add in root authority certificates.
+Before using the REST client in your Java application, you must configure the application's truststore to connect to the Security plugin. If you are using self-signed certificates or demo configurations, you can use the following command to create a custom truststore and add in root authority certificates.
 
 If you're using certificates from a trusted Certificate Authority (CA), you don't need to configure the truststore.
 

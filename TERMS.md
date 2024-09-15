@@ -22,6 +22,10 @@ Avoid. Use *one-time* instead.
 
 Affect as a noun refers to emotion as expressed in face or body language. Affect as a verb means to influence. Do not confuse with effect.
 
+**AI**
+
+No need to define as _artificial intelligence (AI)_.
+
 **AI/ML**
 
 On first mention, use artificial intelligence and machine learning (AI/ML).
@@ -89,6 +93,10 @@ Lower case scaling, auto scaling, and automatic scaling (but not autoscaling) ar
 
 Do not use hyphenated auto-scaling as a compound modifier. Instead, use scaling (for example, scaling policy), or scalable (for example, scalable target or scalable, load-balanced environment).
 
+**AWS Signature Version 4**
+
+Use on first appearance. On subsequent appearances, *Signature Version 4* may be used. Only use *SigV4* when space is limited.
+
 ## B
 
 **below**
@@ -146,9 +154,15 @@ certificate authority
 
 Use _certificates_ on first mention. It’s OK to use _certs_ thereafter.
 
+**checkbox, checkboxes**
+
 **CI/CD**
 
 Use _continuous integration_ and _continuous delivery (CI/CD)_ or _continuous integration and delivery (CI/CD)_ on first mention.
+
+**CLI**
+
+No need to define as _command-line interface (CLI)_.
 
 **cluster**
 
@@ -157,6 +171,10 @@ A collection of one or more nodes.
 **cluster manager**
 
 A single node that routes requests for the cluster and makes changes to other nodes. Each cluster contains a single cluster manager.
+
+**command line, command-line**
+
+Two words as a noun. Hyphenate as an adjective.
 
 **console**
 
@@ -179,6 +197,8 @@ Use data is, not data are. Don’t use datas. Use pieces of data or equivalent t
 **data center**
 
 **dataset**
+
+**data source**
 
 **data store, datastore**
 
@@ -216,6 +236,8 @@ Do not use *disable* to refer to users.
 
 Always hyphenated. Don’t use _double click_.
 
+**downvote**
+
 **dropdown list**
 
 **due to**
@@ -236,7 +258,7 @@ _Effect_ as a noun refers to something that’s caused by something else. _Effec
 
 **e.g.**
 
-Avoid. Use for example or such as instead.
+Avoid. Use _for example_ or _such as_ instead.
 
 **Elastic IP address**
 
@@ -275,6 +297,8 @@ Exception: *Execution* is unavoidable for third-party terms for which no alterna
 
 **fail over (v.), failover (n.)**
 
+**Faiss**
+
 **file name**
 
 **frontend (n., adj.)**
@@ -283,9 +307,25 @@ Use frontend as an adjective and a noun. Do not use front end or front-end. Do n
 
 ## G
 
+**generative AI**
+
+Do not use _GenAI_, _Gen AI_, _gen AI_, or _genAI_. To avoid the overuse of *generative AI*, *AI/ML-powered applications* may also be used.
+
+**geodistance**
+
+**geohash**
+
+**geohex**
+
 **geopoint**
 
+**geopolygon**
+
 **geoshape**
+
+**geospatial**
+
+**geotile**
  
 ## H
 
@@ -302,6 +342,8 @@ Do not use. This term is unnecessarily violent for technical documentation. Use 
 **high performance computing (HPC)**
 
 **hostname**
+
+**Hugging Face**
 
 ## I
 
@@ -327,11 +369,19 @@ Use *on the forum*. Whatever is on the internet (the various websites, etc.), yo
 
 **index, indexes**
 
-A collection of JSON documents. Non-hardcoded references to *indices* should be changed to *indexes*.
+In technical documentation and the UI, use *indexes* as the plural form of *index*. Use *indices* only in the context of mathematical expressions. Variable and setting names should not be changed.
+
+In blog posts, use the plural *indexes* unless there is a domain-specific reason (for example, a mathematical or financial context) to use *indices*.
 
 **Index Management (IM)**
 
 **Index State Management (ISM)**
+
+**ingest pipeline**
+
+Not _ingestion pipeline_.
+
+**inline**
 
 **install in, on**
 
@@ -357,6 +407,12 @@ Use *just* in the sense of *just now* (as in "the resources that you just create
 
 ## K
 
+**keystore**
+
+**key-value**
+
+Not _key/value_.
+
 **kill**
 
 Do not use. Replace with *stop*, *end*, *clear*, *remove*, or *cancel*.
@@ -369,7 +425,7 @@ A simple and popular unsupervised clustering ML algorithm built on top of Tribuo
 
 **k-NN**
 
-Short for _k-nearest neighbors_, the k-NN plugin enables users to search for the k-nearest neighbors to a query point across an index of vectors.
+Short for _k-nearest neighbors_, the k-NN plugin enables users to search for the k-nearest neighbors to a query point across an index of vectors. No need to define.
 
 ## L
 
@@ -394,6 +450,10 @@ One word in reference to software.
 OK to use to call out something for comparison.
 
 As a general rule, if you can replace like with similar to, it’s OK to use like. But, if you can replace _like_ with _such as_, use _such as_.
+
+**LLM**
+
+Define on first appearance as _large language model (LLM)_.
 
 **locate in, on**
 
@@ -423,7 +483,7 @@ Apache Lucene™ is a high-performance, full-featured search engine library writ
 
 **machine learning**
 
-Write as two words (no hyphen) in all cases, including when used as an adjective before a noun. Abbreviate to ML after first use if appropriate.
+When *machine learning* is used multiple times in a document, use *machine learning (ML)* on first mention and *ML* thereafter. There is no need to redefine *ML* when *AI/ML* has already been defined. If spelled out, write *machine learning* as two words (no hyphen) in all cases, including when used as an adjective before a noun.
 
 **Machine Learning (ML) Commons**
 
@@ -479,11 +539,15 @@ OpenSearch is a community-driven, open-source search and analytics suite derived
 
 **OpenSearch Dashboards**
 
-The default visualization tool for data in OpenSearch. On first appearance, use the full name. “Dashboards” may be used on subsequent appearances.
+The default visualization tool for data in OpenSearch. On first appearance, use the full name. *Dashboards* may be used on subsequent appearances.
 
 open source (n.), open-source (adj.)
 
 Use _open source_ as a noun (for example, “The code used throughout this tutorial is open source and can be freely modified”). Use _open-source_ as an adjective _(open-source software)_.
+
+**OpenSearch Playground**
+
+Do not precede with _the_. OpenSearch Playground provides a central location for existing and evaluating users to explore features in OpenSearch and OpenSearch Dashboards without downloading or installing any OpenSearch components locally.
 
 **operating system**
 
@@ -516,13 +580,17 @@ The default scripting language for OpenSearch, either used inline or stored for 
 
 **percent**
 
-Spell out in blog posts (for example, 30 percent).
+Spell out in blog posts (for example, _30 percent_).
 
 Use % in headlines, quotations, and tables or in technical copy.
 
 **Performance Analyzer**
 
 An agent and REST API that allows you to query numerous performance metrics for your cluster, including aggregations of those metrics, independent of the Java Virtual Machine (JVM).
+
+**plaintext, plain text**
+
+Use *plaintext* only to refer to nonencrypted or decrypted text in content about encryption. Use *plain text* to refer to ASCII files.
 
 **please**
 
@@ -542,13 +610,11 @@ Correct: an on-premises solution
 
 Incorrect: an on-premise solution, an on-prem solution
 
+**pretrain**
+
 **primary shard**
 
 A Lucene instance that contains data for some or all of an index.
-
-**primitive**
-
-Avoid using *primitive* (especially plural *primitives*) as a colloquial way of referring to the basic concepts or elements that are associated with a feature or to the simplest elements in a programming language. For greatest clarity and to avoid sounding unpleasant, replace with *primitive data type* or *primitive type*.
 
 **purge**
 
@@ -640,6 +706,8 @@ Never hyphenated. Use _startup_ as a noun (for example, “The following startup
 
 **Stochastic Gradient Descent (SGD)**
 
+**syslog**
+
 ## T
 
 **term frequency–inverse document frequency (TF–IDF)**
@@ -660,9 +728,21 @@ Data that's provided as part of a metric. The time value is assumed to be when t
 
 **time zone**
 
+**trade-off**
+
 **trigger**
 
 Avoid using as a verb to refer to an action that precipitates a subsequent action. It is OK to use when referring to a feature name, such as a *trigger function* or *time-triggered architecture*. As a verb, use an alternative, such as *initiate*, *invoke*, *launch*, or *start*.
+
+**truststore**
+
+**turn on, turn off**
+
+Use *turn on* and *turn off* in reference to a toggle to describe switching a setting or mode on or off.
+
+Don't use *choose*, *select*, *clear*, *slide*, *enable*, or *disable* for a toggle.
+
+For making a feature available or unavailable, use *enable*.
 
 ## U 
 
@@ -673,6 +753,8 @@ A storage tier that you can use to store and analyze your data with Elasticsearc
 **upper left, upper right**
 
 Hyphenate as adjectives. Use instead of *top left* and *top right*, unless the field name uses *top*. For example, "The upper-right corner."
+
+**upvote**
 
 **US**
 
@@ -719,6 +801,8 @@ Do not use. Use *open day* instead.
 **whitelist**
 
 Do not use. Use *allow list* instead.
+
+**white space**
 
 **wish, want, desire, need**
 

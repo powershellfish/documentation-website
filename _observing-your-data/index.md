@@ -3,13 +3,14 @@ layout: default
 title: Observability
 nav_order: 1
 has_children: true
+nav_exclude: true
+permalink: /observing-your-data/
 redirect_from:
   - /observability-plugin/index/
+  - /observing-your-data/index/
 ---
 
 # Observability
-OpenSearch Dashboards
-{: .label .label-yellow :}
 
 Observability is collection of plugins and applications that let you visualize data-driven events by using Piped Processing Language to explore, discover, and query data stored in OpenSearch.
 

@@ -6,6 +6,8 @@ nav_order: 40
 ---
 
 # Nodes usage
+**Introduced 1.0**
+{: .label .label-purple }
 
 The nodes usage endpoint returns low-level information about REST action usage on nodes.
 
@@ -92,4 +94,4 @@ The following is an example response:
 
 ## Required permissions
 
-If you use the security plugin, make sure you set the following permissions: `cluster:manage/nodes` or `cluster:monitor/nodes`.
+If you use the Security plugin, make sure you set the following permissions: `cluster:manage/nodes` or `cluster:monitor/nodes`.

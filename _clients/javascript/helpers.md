@@ -7,11 +7,11 @@ nav_order: 2
 
 # Helper methods
 
-Helper methods simplify the use of complicated API tasks.
+Helper methods simplify the use of complicated API tasks. For the client's complete API documentation and additional examples, see the [JS client API documentation](https://opensearch-project.github.io/opensearch-js/2.2/index.html).
 
 ## Bulk helper
 
-The bulk helper simplifies making complex bulk API requests.
+The bulk helper simplifies making complex bulk API requests. The bulk helper supports operations of the same kind. Alternatively, you can use the `client.bulk` method to perform multiple types of bulk operations. For example, you can send `delete` and `index` operations in one bulk request. For more information, see the [Bulk guide](https://github.com/opensearch-project/opensearch-js/blob/main/guides/bulk.md).
 
 ### Usage
 
@@ -68,7 +68,7 @@ When creating a new bulk helper instance, you can use the following configuratio
 
 ### Examples
 
-The following examples illustrate the index, create, update, and delete bulk helper operations.
+The following examples illustrate the index, create, update, and delete bulk helper operations. For more information and advanced index actions, see the [`opensearch-js` guides](https://github.com/opensearch-project/opensearch-js/tree/main/guides) in GitHub.  
 
 #### Index
 
@@ -200,3 +200,6 @@ client.helpers.bulk({
 })
 ```
 {% include copy.html %}
+
+## Related articles
+https://github.com/opensearch-project/opensearch-js/tree/main/guides
